@@ -14,11 +14,6 @@ const TELEGRAM_API = require('node-telegram-bot-api');
 const BOT = new TELEGRAM_API(TELEGRAM_BOT_TOKEN, {polling: true});
 const BASE_URL = 'https://9ace-194-50-15-255.ngrok.io';
 
-const REQUEST = {
-    POST: 'post',
-    GET: 'get'
-};
-
 var userState = new Map();
 
 BOT.setMyCommands([
@@ -49,19 +44,6 @@ function removeInlineKeyboard(msgId, chatId) {
 }
 
 async function handleMessageText(msgText, chatId) {
-
-    /* Handle writing Yandex credentials */
-    if (userState.get(chatId)) {
-        if (userState.get(chatId).login === '') {
-            userState.get(chatId).login = msgText;
-            BOT.sendMessage(chatId, 'Введите пароль');
-            return;
-        } else {
-            userState.get(chatId).password = msgText;
-            msgText = COMMANDS.YANDEX_MUSIC_AUTH;
-        }
-    }
-
     switch (msgText) {
         case COMMANDS.START :
             BOT.sendSticker(chatId, 'https://i.postimg.cc/8Cq2Sk6M/sticker-vk-mikewazowski-004-removebg-preview.webp');
@@ -126,31 +108,49 @@ async function handleMessageText(msgText, chatId) {
             break;
             
         case COMMANDS.SPOTIFY_SHOW_PLAYLISTS :
-            BOT.sendMessage(chatId, 'Ваши плейлисты:');
             axios.post(BASE_URL + '/rest/playlists/playlists', {
                 musicProvider: 'SPOTIFY',
                 tgBotId: String(chatId)
             }).then(response => {
-                console.log(response);
+                inline_keyboard = [];
+                response.data.forEach(playlist => {
+                    inline_keyboard.push([{text: playlist, callback_data: COMMANDS.PLAYLIST + playlist}]);
+                });
+                BOT.sendMessage(chatId, 'Ваши плейлисты:', {reply_markup: JSON.stringify({inline_keyboard})});
             }).catch(error => {
                 console.log(error.response?.status);
             });
             break;
 
-        case 'Рок сегодня' :
-            axios.post(BASE_URL + '/rest/playlists/transfer-playlist', {
-                musicProvider: 'SPOTIFY',
-                tgBotId: String(chatId),
-                name: 'Рок сегодня'
-            }).then(response => {
-                console.log(response);
-            }).catch(error => {
-                //TODO: error message
-                console.log(error.response?.status);
-            });
-            break;
+        case msgText.substring(COMMANDS.PLAYLIST) != -1 :
+            console.log(msgText.substring(COMMANDS.PLAYLIST.length));
             
         default :
+            /* Handle writing Yandex credentials */
+            if (userState.get(chatId)) {
+                if (userState.get(chatId).login === '') {
+                    userState.get(chatId).login = msgText;
+                    BOT.sendMessage(chatId, 'Введите пароль');
+                } else {
+                    userState.get(chatId).password = msgText;
+                    handleMessageText(COMMANDS.YANDEX_MUSIC_AUTH, chatId);
+                }
+                break;
+            }
+            /* Handle playlist choise */
+            if (msgText.substring(COMMANDS.PLAYLIST) != -1) {
+                console.log(msgText.substring(COMMANDS.PLAYLIST.length));
+                axios.post(BASE_URL + '/rest/playlists/transfer-playlist', {
+                    musicProvider: 'SPOTIFY',
+                    tgBotId: String(chatId),
+                    name: msgText.substring(COMMANDS.PLAYLIST.length)
+                }).then(response => {
+                    console.log(response);
+                }).catch(error => {
+                    console.log(error.response?.status);
+                });
+                break;
+            }
             BOT.sendMessage(chatId, 'Не удалось распознать команду. С доступным списком команд вы можете ознакомиться в меню бота');
     }
 }
