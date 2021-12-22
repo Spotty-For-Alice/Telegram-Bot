@@ -8,13 +8,18 @@ const {
     BUTTONS,
     COMMANDS
  } = require('./handled-text');
-
 const axios = require('axios');
 
 const TELEGRAM_API = require('node-telegram-bot-api');
 const BOT = new TELEGRAM_API(TELEGRAM_BOT_TOKEN, {polling: true});
-
 const BASE_URL = 'https://9ace-194-50-15-255.ngrok.io';
+
+const REQUEST = {
+    POST: 'post',
+    GET: 'get'
+};
+
+var userState = new Map();
 
 BOT.setMyCommands([
     {command: COMMANDS.START, description: 'Поздороваться с ботом'},
@@ -44,6 +49,19 @@ function removeInlineKeyboard(msgId, chatId) {
 }
 
 async function handleMessageText(msgText, chatId) {
+
+    /* Handle writing Yandex credentials */
+    if (userState.get(chatId)) {
+        if (userState.get(chatId).login === '') {
+            userState.get(chatId).login = msgText;
+            BOT.sendMessage(chatId, 'Введите пароль');
+            return;
+        } else {
+            userState.get(chatId).password = msgText;
+            msgText = COMMANDS.YANDEX_MUSIC_AUTH;
+        }
+    }
+
     switch (msgText) {
         case COMMANDS.START :
             BOT.sendSticker(chatId, 'https://i.postimg.cc/8Cq2Sk6M/sticker-vk-mikewazowski-004-removebg-preview.webp');
@@ -73,7 +91,21 @@ async function handleMessageText(msgText, chatId) {
             break;
         
         case COMMANDS.YANDEX_MUSIC_AUTH :
-            BOT.sendMessage(chatId, 'Запрос к Диме, а потом к Филиппу');
+            if (!userState.get(chatId)) {
+                BOT.sendMessage(chatId, 'Введите логин');
+                userState.set(chatId, {login : '', password : ''});
+            } else {
+                axios.post(BASE_URL + '/rest/auth/yandex-auth', {
+                    username: userState.get(chatId).login,
+                    password: userState.get(chatId).password,
+                    tgBotId: String(chatId)
+                }).then(response => {
+                    console.log(response);
+                }).catch(error => {
+                    console.log(error.response?.status);
+                });
+                userState.delete(chatId);
+            }
             break;
 
         case COMMANDS.SYNC_OPTIONS :
@@ -104,9 +136,22 @@ async function handleMessageText(msgText, chatId) {
                 console.log(error.response?.status);
             });
             break;
+
+        case 'Рок сегодня' :
+            axios.post(BASE_URL + '/rest/playlists/transfer-playlist', {
+                musicProvider: 'SPOTIFY',
+                tgBotId: String(chatId),
+                name: 'Рок сегодня'
+            }).then(response => {
+                console.log(response);
+            }).catch(error => {
+                //TODO: error message
+                console.log(error.response?.status);
+            });
+            break;
             
         default :
-            BOT.sendMessage(chatId, 'Не понял');
+            BOT.sendMessage(chatId, 'Не удалось распознать команду. С доступным списком команд вы можете ознакомиться в меню бота');
     }
 }
 
