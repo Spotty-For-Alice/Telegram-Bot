@@ -6,7 +6,8 @@ module.exports = {
         SPOTIFY_AUTH: '/spotify_auth',
         YANDEX_MUSIC_AUTH: '/yandex_music_auth',
         SYNC_OPTIONS: '/sync_options',
-        SPOTIFY_SYNC_TO_YANDEX: '/spotify_sync_to_yandex'
+        SPOTIFY_SYNC_TO_YANDEX: '/spotify_sync_to_yandex',
+        SPOTIFY_SHOW_PLAYLISTS: '/spotify_show_playlists'
     },
     BUTTONS : {
         AUTH: 'Авторизация',

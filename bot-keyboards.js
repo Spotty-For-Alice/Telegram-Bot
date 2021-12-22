@@ -24,7 +24,7 @@ module.exports = {
     SYNC_OPTIONS : {
         reply_markup: JSON.stringify({
             inline_keyboard: [
-                [{text: 'Spotify', callback_data: COMMANDS.SPOTIFY_SYNC_TO_YANDEX}],
+                [{text: 'Spotify "Любимые треки"', callback_data: COMMANDS.SPOTIFY_SYNC_TO_YANDEX}, {text: 'Выбрать плейлист', callback_data: COMMANDS.SPOTIFY_SHOW_PLAYLISTS}],
             ]
         })
     }

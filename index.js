@@ -14,7 +14,7 @@ const axios = require('axios');
 const TELEGRAM_API = require('node-telegram-bot-api');
 const BOT = new TELEGRAM_API(TELEGRAM_BOT_TOKEN, {polling: true});
 
-const BASE_URL = 'https://d58e-194-50-15-255.ngrok.io';
+const BASE_URL = 'https://9ace-194-50-15-255.ngrok.io';
 
 BOT.setMyCommands([
     {command: COMMANDS.START, description: 'Поздороваться с ботом'},
@@ -30,7 +30,18 @@ BOT.on('message', async msgData => {
 
 BOT.on('callback_query', async msgData => {
     handleMessageText(msgData.data, msgData.message.chat.id);
+    removeInlineKeyboard(msgData.message.message_id, msgData.message.chat.id);
 })
+
+function removeInlineKeyboard(msgId, chatId) {
+    BOT.editMessageText('Следуйте инструкциям далее', {
+        message_id: msgId, 
+        chat_id: chatId,
+        reply_markup: {
+            remove_inline_keyboard: true
+        }
+    });
+}
 
 async function handleMessageText(msgText, chatId) {
     switch (msgText) {
@@ -81,7 +92,19 @@ async function handleMessageText(msgText, chatId) {
                 console.log(error.response?.status);
             });
             break;
-        
+            
+        case COMMANDS.SPOTIFY_SHOW_PLAYLISTS :
+            BOT.sendMessage(chatId, 'Ваши плейлисты:');
+            axios.post(BASE_URL + '/rest/playlists/playlists', {
+                musicProvider: 'SPOTIFY',
+                tgBotId: String(chatId)
+            }).then(response => {
+                console.log(response);
+            }).catch(error => {
+                console.log(error.response?.status);
+            });
+            break;
+            
         default :
             BOT.sendMessage(chatId, 'Не понял');
     }
