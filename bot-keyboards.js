@@ -19,5 +19,13 @@ module.exports = {
                 [{text: 'Яндекс.Музыка', callback_data: COMMANDS.YANDEX_MUSIC_AUTH}]
             ]
         })
+    },
+
+    SYNC_OPTIONS : {
+        reply_markup: JSON.stringify({
+            inline_keyboard: [
+                [{text: 'Spotify', callback_data: COMMANDS.SPOTIFY_SYNC_TO_YANDEX}],
+            ]
+        })
     }
 }
