@@ -11,8 +11,9 @@ const {
 const axios = require('axios');
 
 const TELEGRAM_API = require('node-telegram-bot-api');
+const { system } = require('nodemon/lib/config');
 const BOT = new TELEGRAM_API(TELEGRAM_BOT_TOKEN, {polling: true});
-const BASE_URL = 'https://9ace-194-50-15-255.ngrok.io';
+const BASE_URL = 'https://2144-194-50-15-255.ngrok.io';
 
 var userState = new Map();
 
@@ -47,7 +48,7 @@ async function handleMessageText(msgText, chatId) {
     switch (msgText) {
         case COMMANDS.START :
             BOT.sendSticker(chatId, 'https://i.postimg.cc/8Cq2Sk6M/sticker-vk-mikewazowski-004-removebg-preview.webp');
-            BOT.sendMessage(chatId, '123', BOT_OPTIONS)
+            BOT.sendMessage(chatId, 'Приветсвуем всех миломанов!', BOT_OPTIONS)
             break;
         
         case COMMANDS.INFO :
@@ -68,6 +69,7 @@ async function handleMessageText(msgText, chatId) {
                 const authUrl = response.data?.url;
                 BOT.sendMessage(chatId, authUrl);
             }).catch(error => {
+                BOT.sendMessage(chatId, 'Что-то пошло нет так, попробуйте еще раз авторизироваться в выбранных сервисах');
                 console.log(error.response?.status);
             });
             break;
@@ -82,8 +84,9 @@ async function handleMessageText(msgText, chatId) {
                     password: userState.get(chatId).password,
                     tgBotId: String(chatId)
                 }).then(response => {
-                    console.log(response);
+                    BOT.sendMessage(chatId, 'Авторизация прошла успешно!');
                 }).catch(error => {
+                    BOT.sendMessage(chatId, 'Что-то пошло нет так, попробуйте еще раз авторизироваться в выбранных сервисах');
                     console.log(error.response?.status);
                 });
                 userState.delete(chatId);
@@ -103,6 +106,7 @@ async function handleMessageText(msgText, chatId) {
             }).then(response => {
                 console.log(response);
             }).catch(error => {
+                BOT.sendMessage(chatId, 'Что-то пошло нет так, попробуйте еще раз авторизироваться в выбранных сервисах');
                 console.log(error.response?.status);
             });
             break;
@@ -118,6 +122,7 @@ async function handleMessageText(msgText, chatId) {
                 });
                 BOT.sendMessage(chatId, 'Ваши плейлисты:', {reply_markup: JSON.stringify({inline_keyboard})});
             }).catch(error => {
+                BOT.sendMessage(chatId, 'Что-то пошло нет так, попробуйте еще раз авторизироваться в выбранных сервисах');
                 console.log(error.response?.status);
             });
             break;
@@ -145,8 +150,10 @@ async function handleMessageText(msgText, chatId) {
                     tgBotId: String(chatId),
                     name: msgText.substring(COMMANDS.PLAYLIST.length)
                 }).then(response => {
+                    BOT.sendMessage(chatId, 'Плейлист получен и уже добавляется в Яндекс.Музуку!');
                     console.log(response);
                 }).catch(error => {
+                    BOT.sendMessage(chatId, 'Что-то пошло нет так, попробуйте еще раз авторизироваться в выбранных сервисах');
                     console.log(error.response?.status);
                 });
                 break;
