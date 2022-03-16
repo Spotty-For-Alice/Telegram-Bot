@@ -1,5 +1,5 @@
-const { AUTH_OPTIONS, BOT_OPTIONS,SYNC_OPTIONS } = require('./bot-keyboards');
-const { BUTTONS, COMMANDS } = require('./handled-text');
+const { AUTH_OPTIONS, BOT_OPTIONS,SYNC_OPTIONS } = require('./constants/bot-keyboards');
+const { BUTTONS, COMMANDS } = require('./constants/handled-text');
 const axios = require('axios');
 
 const BASE_URL = 'https://2144-194-50-15-255.ngrok.io';

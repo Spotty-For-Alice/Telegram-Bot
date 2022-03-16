@@ -1,7 +1,7 @@
 const mockAxios = require('axios');
 
-const { BUTTONS, COMMANDS } = require('./handled-text');
-const service = require('./bot-service');
+const { BUTTONS, COMMANDS } = require('../constants/handled-text');
+const service = require('../bot-service');
 
 jest.mock('axios');
 
