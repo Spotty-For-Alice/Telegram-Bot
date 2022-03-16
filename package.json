@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jest --watchAll",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +16,9 @@
     "axios": "^0.21.4",
     "node-telegram-bot-api": "^0.56.0",
     "nodemon": "^2.0.15"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2"
   }
 }
