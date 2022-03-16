@@ -1,1 +1,1 @@
-# spotty_for_alice_bot
+# "Spotty For Alice" Telegram Bot
