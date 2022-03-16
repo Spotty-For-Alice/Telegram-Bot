@@ -9,20 +9,20 @@ const errorMessage = 'Что-то пошло не так';
 const chatId = 12345;
 
 describe("Validate auth button handling", () => {
-    it ('chat id and message text', () => {
+    it ('Chat id and message text', () => {
         return service.getMessageForReply(BUTTONS.AUTH, chatId).then(res => {
             expect(res.chatId).toEqual(chatId);
             expect(res.text.includes(errorMessage)).toBe(false);
         })
     });
-    it ('inline keybiard has button for Spotify auth', () => {
+    it ('Inline keybiard has button for Spotify auth', () => {
         return service.getMessageForReply(BUTTONS.AUTH, 12345).then(res => {
             expect(res.options).not.toBeNull();
             const hasSpotify = JSON.stringify(res.options).includes('Spotify');
             expect(hasSpotify).toBe(true);
         })
     });
-    it ('inline keybiard has button for Yandex Music auth', () => {
+    it ('Inline keybiard has button for Yandex Music auth', () => {
         return service.getMessageForReply(BUTTONS.AUTH, 12345).then(res => {
             expect(res.options).not.toBeNull();
             const hasSpotify = JSON.stringify(res.options).includes('Яндекс');
@@ -44,7 +44,7 @@ describe("Validate base commands", () => {
             expect(res.text.includes('Информация')).toBe(true);
         })
     });
-    it ('simple text', () => {
+    it ('Simple text', () => {
         return service.getMessageForReply('simple text', chatId).catch(err => {
             expect(err.text.includes('Не удалось распознать команду')).toBe(true);
         })
@@ -54,7 +54,7 @@ describe("Validate base commands", () => {
 describe("Validate auth commands", () => {
     const outhURL = 'https://spotify.com';
 
-    it ('get spotify oath 2.0 url', () => {
+    it ('Get spotify oath 2.0 url', () => {
         mockAxios.post.mockImplementationOnce(() => Promise.resolve({
             response: { status: 200 },
             data: { url: outhURL }
@@ -65,7 +65,7 @@ describe("Validate auth commands", () => {
             })
     });
 
-    it ('handle errors in getting spotify oauth url', () => {
+    it ('Handle errors in getting spotify oauth url', () => {
         mockAxios.post.mockImplementationOnce(() => Promise.reject({
             response: { status: 400 }
         }));
@@ -75,7 +75,7 @@ describe("Validate auth commands", () => {
             })
     });
 
-    it ('write yandex music credentials', () => {
+    it ('Write yandex music credentials', () => {
         mockAxios.post.mockImplementationOnce(() => Promise.resolve({
             response: { status: 200 }
         }));
@@ -96,7 +96,7 @@ describe("Validate auth commands", () => {
             })
     });
 
-    it ('write invalid yandex music credentials', () => {
+    it ('Write invalid yandex music credentials', () => {
         mockAxios.post.mockImplementationOnce(() => Promise.reject({
             response: { status: 400 }
         }));
@@ -183,7 +183,7 @@ describe("Sync music between music services", () => {
             })
     });
 
-    it ('Select playlist from list', () => {
+    it ('Failed select playlist from list', () => {
         const playlist = 'Playlist1';
 
         mockAxios.post.mockImplementationOnce(() => Promise.reject({
