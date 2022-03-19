@@ -2,6 +2,7 @@ const { AUTH_OPTIONS, BOT_OPTIONS,SYNC_OPTIONS } = require('./constants/bot-keyb
 const { BUTTONS, COMMANDS } = require('./constants/handled-text');
 const axios = require('axios');
 
+const ALICE_SKILL_LINK = 'https://dialogs.yandex.ru/store/skills/40cd4d84-podklyuchit-sya-k-spo';
 const BASE_URL = 'https://2144-194-50-15-255.ngrok.io';
 var userState = new Map();
 
@@ -100,6 +101,9 @@ const getMessageForReply = (msgText, chatId) => {
                     reject(buildResponse(chatId, 'Что-то пошло не так, попробуйте еще раз авторизироваться в выбранных сервисах'));
                 });
                 break;
+
+            case COMMANDS.YANDEX_DIALOGS_AUTH :
+                resolve(buildResponse(chatId, 'Введи свое имя пользователя yandex в нашем навыке для Алисы по ссылке ' + ALICE_SKILL_LINK));
                 
             default :
                 /* Handle writing Yandex credentials */

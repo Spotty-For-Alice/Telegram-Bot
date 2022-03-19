@@ -16,7 +16,8 @@ module.exports = {
         reply_markup: JSON.stringify({
             inline_keyboard: [
                 [{text: 'Spotify', callback_data: COMMANDS.SPOTIFY_AUTH}],
-                [{text: 'Яндекс.Музыка', callback_data: COMMANDS.YANDEX_MUSIC_AUTH}]
+                [{text: 'Яндекс.Музыка', callback_data: COMMANDS.YANDEX_MUSIC_AUTH}],
+                [{text: 'Яндекс.Диалоги', callback_data: COMMANDS.YANDEX_DIALOGS_AUTH}]
             ]
         })
     },
