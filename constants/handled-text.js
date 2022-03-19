@@ -8,7 +8,8 @@ module.exports = {
         SYNC_OPTIONS: '/sync_options',
         SPOTIFY_SYNC_TO_YANDEX: '/spotify_sync_to_yandex',
         SPOTIFY_SHOW_PLAYLISTS: '/spotify_show_playlists',
-        PLAYLIST: '/playlist'
+        PLAYLIST: '/playlist',
+        YANDEX_DIALOGS_AUTH: '/yandex_dialogs_auth'
     },
     BUTTONS : {
         AUTH: 'Авторизация',
