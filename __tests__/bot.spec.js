@@ -6,31 +6,29 @@ const mockAxios = require('axios');
 jest.mock('axios');
 
 describe('Telegram bot integraion tests', () => {
-    const serverConfig = {
-      port: 9001
+    const server = new TelegramServer(
+      {port: 9001}
+    );
+
+    const botOptions = {
+      polling: true, 
+      baseApiUrl: server.config.apiURL
     };
-    const token = 'sampleToken';
+    const token = 'testToken';
+    const telegramBot = new TelegramBot(token, botOptions);
     
-    var server;
-    var client;
-    
-    beforeEach(() => {
-      server = new TelegramServer(serverConfig);
+    beforeAll(() => {
       return server.start()
         .then(() => {
           client = server.getClient(token);
-          const botOptions = {
-            polling: true, 
-            baseApiUrl: server.config.apiURL
-          };
-          new Bot(
-            new TelegramBot(token, botOptions)
-          );
+          new Bot(telegramBot);
         });
     });
   
-    afterEach(() => {
-      return server.stop();
+    afterAll(() => {
+      return server.stop().then(() => {
+        telegramBot.stopPolling();
+      });
     });
   
     it('get reply for client input command', async () => {
