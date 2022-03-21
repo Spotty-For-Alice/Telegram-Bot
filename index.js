@@ -1,3 +1,6 @@
+const { TELEGRAM_BOT_TOKEN } = require('./credits');
+const TELEGRAM_API = require('node-telegram-bot-api');
+
 const Bot = require('./bot');
 
 function setUpBot() {

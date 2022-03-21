@@ -1,6 +1,3 @@
-const { TELEGRAM_BOT_TOKEN } = require('./credits');
-const TELEGRAM_API = require('node-telegram-bot-api');
-
 const { COMMANDS } = require('./constants/handled-text');
 const service = require('./bot-service');
 
