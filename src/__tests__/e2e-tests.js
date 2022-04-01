@@ -3,9 +3,6 @@ const TelegramServer = require('telegram-test-api');
 const TelegramBot = require('node-telegram-bot-api');
 const Bot = require('../bot');
 
-require('dotenv').config()
-
-
 describe('E2E', () => {
     const server = new TelegramServer(
       {port: 9001}
