@@ -1,3 +1,4 @@
 credits.js
 /node_modules
 /coverage
+.env

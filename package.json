@@ -2,10 +2,10 @@
   "name": "spottyforalicebot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js",
     "test": "jest --watchAll",
     "test:coverage": "jest --coverage",
     "test:ci": "jest"
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.4",
+    "dotenv": "^16.0.0",
     "node-telegram-bot-api": "^0.56.0",
     "nodemon": "^2.0.15",
     "telegram-test-api": "^4.1.3"

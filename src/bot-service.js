@@ -3,7 +3,6 @@ const { BUTTONS, COMMANDS } = require('./constants/handled-text');
 const axios = require('axios');
 
 const ALICE_SKILL_LINK = 'https://dialogs.yandex.ru/store/skills/40cd4d84-podklyuchit-sya-k-spo';
-const BASE_URL = 'https://2144-194-50-15-255.ngrok.io';
 var userState = new Map();
 
 const getMessageForReply = (msgText, chatId) => {
@@ -24,7 +23,7 @@ const getMessageForReply = (msgText, chatId) => {
                 break;
             
             case COMMANDS.SPOTIFY_AUTH :
-                reqUrl = BASE_URL + '/rest/auth/get-url';
+                reqUrl = process.env.REQUEST_HANDLER_URL + '/rest/auth/get-url';
                 axios.post(reqUrl, {
                     musicProvider: 'SPOTIFY',
                     tgBotId: String(chatId)
@@ -42,7 +41,7 @@ const getMessageForReply = (msgText, chatId) => {
                     userState.set(chatId, {login : '', password : ''});
                     resolve(buildResponse(chatId, 'Введите логин'));
                 } else {
-                    reqUrl = BASE_URL + '/rest/auth/yandex-auth';
+                    reqUrl = process.env.REQUEST_HANDLER_URL + '/rest/auth/yandex-auth';
                     axios.post(reqUrl, {
                         username: userState.get(chatId).login,
                         password: userState.get(chatId).password,
@@ -67,7 +66,7 @@ const getMessageForReply = (msgText, chatId) => {
                 break;
     
             case COMMANDS.SPOTIFY_SYNC_TO_YANDEX :
-                reqUrl = BASE_URL + '/rest/playlists/transfer-playlist';
+                reqUrl = process.env.REQUEST_HANDLER_URL + '/rest/playlists/transfer-playlist';
                 axios.post(reqUrl, {
                     musicProvider: 'SPOTIFY',
                     tgBotId: String(chatId)
@@ -80,7 +79,7 @@ const getMessageForReply = (msgText, chatId) => {
                 break;
                 
             case COMMANDS.SPOTIFY_SHOW_PLAYLISTS :
-                reqUrl = BASE_URL + '/rest/playlists/playlists';
+                reqUrl = process.env.REQUEST_HANDLER_URL + '/rest/playlists/playlists';
                 axios.post(reqUrl, {
                     musicProvider: 'SPOTIFY',
                     tgBotId: String(chatId)
@@ -126,7 +125,7 @@ const getMessageForReply = (msgText, chatId) => {
                 /* Handle playlist choise */
                 if (msgText.indexOf(COMMANDS.PLAYLIST) != -1) {
                     console.log(msgText.substring(COMMANDS.PLAYLIST.length));
-                    reqUrl = BASE_URL + '/rest/playlists/transfer-playlist';
+                    reqUrl = process.env.REQUEST_HANDLER_URL + '/rest/playlists/transfer-playlist';
                     axios.post(reqUrl, {
                         musicProvider: 'SPOTIFY',
                         tgBotId: String(chatId),
