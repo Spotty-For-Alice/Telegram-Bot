@@ -3,9 +3,12 @@ const TelegramServer = require('telegram-test-api');
 const TelegramBot = require('node-telegram-bot-api');
 const Bot = require('../bot');
 
+require('dotenv').config();
+
 describe('E2E', () => {
     const server = new TelegramServer(
-      {port: 9001}
+      {port: 9001,
+        storeTimeout: 5000}
     );
 
     const botOptions = {
@@ -16,9 +19,6 @@ describe('E2E', () => {
     const telegramBot = new TelegramBot(token, botOptions);
     
     beforeAll(() => {
-      console.log('!!!!');
-      console.log(process.env.REQUEST_HANDLER_URL);
-
       return server.start()
         .then(() => {
           client = server.getClient(token);
