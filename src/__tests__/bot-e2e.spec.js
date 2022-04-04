@@ -8,7 +8,7 @@ require('dotenv').config();
 
 describe('e2e testing', () => {
     const server = new TelegramServer({
-      port: 9001
+      port: 8000
     });
 
     const botOptions = {
