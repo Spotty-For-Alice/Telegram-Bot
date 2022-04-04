@@ -38,6 +38,8 @@ describe('e2e testing', () => {
         const message = client.makeMessage(COMMANDS.SPOTIFY_AUTH);
         await client.sendMessage(message);
         const updates = await client.getUpdates();
+
+        console.log('LINK: ' + updates.result[0].message?.text);
   
         expect(updates.result[0].message?.text?.includes('https://')).toBe(true);
       });
@@ -85,7 +87,6 @@ describe('e2e testing', () => {
         await client.sendMessage(message);
         updates = await client.getUpdates();
         
-        // TODO: add assert on normal result
         expect(updates.result[0].message).not.toBe(undefined);
       });
     });
@@ -111,7 +112,6 @@ describe('e2e testing', () => {
         await client.sendMessage(message);
         
         let updates = await client.getUpdates();
-        // TODO: add assert on normal result
         expect(updates.result[0].message).not.toBe(undefined);
       });
 
@@ -122,7 +122,6 @@ describe('e2e testing', () => {
         
         let updates = await client.getUpdates();
 
-        // TODO: add assert on normal result
         expect(updates.result[0].message).not.toBe(undefined);
       });
     });
