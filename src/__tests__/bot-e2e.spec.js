@@ -125,4 +125,52 @@ describe('e2e testing', () => {
         expect(updates.result[0].message).not.toBe(undefined);
       });
     });
+
+    describe('validate failed states', () => {
+      beforeAll(() => {
+        process.env.REQUEST_HANDLER_URL = 'fake';
+      });
+
+      it('failed get playlists', async () => {
+        let message = client.makeMessage(COMMANDS.SPOTIFY_SHOW_PLAYLISTS);
+        await client.sendMessage(message);
+        let updates = await client.getUpdates();
+
+        expect(updates.result[0].message?.text?.includes('Что-то пошло не так')).toBe(true);
+      });
+
+      it('failed sync favourite playlist', async () => {
+        let message = client.makeMessage(COMMANDS.SPOTIFY_SYNC_TO_YANDEX);
+        await client.sendMessage(message);
+        let updates = await client.getUpdates();
+
+        expect(updates.result[0].message?.text?.includes('Что-то пошло не так')).toBe(true);
+      });
+
+      it('failed sync selected playlist', async () => {
+        const playlistName = 'TestPlaylist1';
+        let message = client.makeMessage(COMMANDS.PLAYLIST + playlistName);
+        await client.sendMessage(message);
+        let updates = await client.getUpdates();
+
+        expect(updates.result[0].message?.text?.includes('Что-то пошло не так')).toBe(true);
+      });
+
+      it('auth to Yandex Music', async () => {
+        let message = client.makeMessage(COMMANDS.YANDEX_MUSIC_AUTH);
+        await client.sendMessage(message);
+        let updates = await client.getUpdates();
+
+        message = client.makeMessage('login');
+        await client.sendMessage(message);
+        updates = await client.getUpdates();
+
+        message = client.makeMessage('password');
+        await client.sendMessage(message);
+        updates = await client.getUpdates();
+        
+        expect(updates.result[0].message?.text?.includes('Что-то пошло не так')).toBe(true);
+      });
+
+    });
   });
